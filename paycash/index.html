@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .background-image {
+            position: absolute;
+            background-image: url('paycash-background.png');
+            width: 1080px;
+            height: 1920px;
+            text-align: center;
+        }
+
+        .amount-text {
+            position: relative;
+            color: #000;
+            font-size: 75px;
+            top: 1648px;
+            font-family: monospace;
+        }
+
+        #barcode {
+            position: relative;
+            top: 980px;
+        }
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
+    <script> 
+        function formatCode(code) {
+            var part1 = code.substring(0, 4);
+            var part2 = code.substring(4, 8);
+            var part3 = code.substring(8);
+            return part1 + "-" + part2 + "-" + part3;
+        }
+    </script>
+</head>
+<body>
+    <div class="background-image">
+        <div>
+            <p id="amount-text" class="amount-text"></p>
+            <svg id="barcode"></svg>
+        </div>
+    </div>
+    <script>
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const text = urlParams.get('amount');
+            const barcode = urlParams.get('barcode');
+            const codeText = "${code.substring(0, 4)} ${code.substring(4, 8)} ${code.substring(8)}";
+            document.getElementById('amount-text').innerHTML = "$"+text;
+            JsBarcode("#barcode", barcode, {
+                format: "CODE128",
+                width: 5,
+                height: 240,
+                text: formatCode(barcode),
+                fontSize: 75,
+            });
+        }
+    </script>
+</body>
+</html>
